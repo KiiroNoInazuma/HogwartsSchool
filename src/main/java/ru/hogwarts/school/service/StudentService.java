@@ -10,9 +10,6 @@ import java.util.Map;
 public class StudentService implements MetCrud<Students> {
     private static long idStudent;
 
-    public static void setIdStudent(long idStudent) {
-        StudentService.idStudent = idStudent;
-    }
 
     private static Map<Long, Students> STUDENTS_MAP = new HashMap<>();
 
@@ -22,6 +19,10 @@ public class StudentService implements MetCrud<Students> {
 
     public static void setStudentsMap(Map<Long, Students> studentsMap) {
         STUDENTS_MAP = studentsMap;
+    }
+
+    public static void setIdStudent(long idStudent) {
+        StudentService.idStudent = idStudent;
     }
 
     @Override
@@ -51,7 +52,8 @@ public class StudentService implements MetCrud<Students> {
             return "Такой ученик в школе не числиться, либо был отчислен ранее.";
         }
     }
-@Override
+
+    @Override
     public StringBuilder getAll() {
         StringBuilder result = new StringBuilder();
         for (Map.Entry<Long, Students> map : STUDENTS_MAP.entrySet()) {
@@ -62,9 +64,11 @@ public class StudentService implements MetCrud<Students> {
 
     public StringBuilder getAgeStudents(int age) {
         StringBuilder result = new StringBuilder();
-        for (Students students : STUDENTS_MAP.values().stream().filter(students -> students.age() == age).toList()) {
-            result.append(students).append("\n");
-        }
+        STUDENTS_MAP
+                .values()
+                .stream()
+                .filter(students -> students.age() == age)
+                .forEach(students -> result.append(students).append("\n"));
         return result;
     }
 }

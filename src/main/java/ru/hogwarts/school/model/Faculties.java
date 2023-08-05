@@ -17,7 +17,7 @@ public class Faculties {
         studentsMap = StudentService.getStudentsMap();
     }
 
-    public StringBuilder convert() {
+    private StringBuilder convert() {
         StringBuilder result = new StringBuilder();
         for (Map.Entry<Long, Students> map : studentsMap.entrySet()) {
             result.append(map.getKey()).append(": ").append(map.getValue()).append("\n");
