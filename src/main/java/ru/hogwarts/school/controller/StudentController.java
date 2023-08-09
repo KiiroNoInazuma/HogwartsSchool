@@ -14,6 +14,7 @@ import ru.hogwarts.school.service.StudentService;
 public class StudentController {
     @Resource
     private MetCrud<Students> studentsMetCrud;
+
     @Operation(summary = "ДОБАВИТЬ СТУДЕНТА В СПИСОК НА РАСПРЕДЕЛЕНИЕ")
     @PostMapping("enrolled")
     public ResponseEntity<Students> enrolled(@RequestBody Students students) {
