@@ -8,12 +8,18 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Students;
 import ru.hogwarts.school.service.MetCrud;
 import ru.hogwarts.school.service.StudentService;
+
+import java.util.List;
+
 @Tag(name = "Добавить учеников в список школы")
 @RestController
 @RequestMapping("student")
 public class StudentController {
     @Resource
     private MetCrud<Students> studentsMetCrud;
+    @Resource
+    private StudentService studentService;
+
 
     @Operation(summary = "ДОБАВИТЬ СТУДЕНТА В СПИСОК НА РАСПРЕДЕЛЕНИЕ")
     @PostMapping("enrolled")
@@ -22,18 +28,20 @@ public class StudentController {
     }
 
     @Operation(summary = "ИЗМЕНИТЬ ДАННЫЕ СТУДЕНТА В СПИСКЕ")
-    @PutMapping("replace/{id}")
-    public ResponseEntity<Students> replaceStudent(@PathVariable long id, @RequestBody Students students) {
-        Students edit = studentsMetCrud.edit(id, students);
+    @PutMapping("replace")
+    public ResponseEntity<Students> replaceStudent(@RequestBody Students students) {
+        Students edit = studentsMetCrud.edit(students);
         if (edit == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(edit);
     }
+
     @Operation(summary = "ИСКЛЮЧИТЬ СТУДЕНТА ИЗ СПИСКА")
     @DeleteMapping("exclude/{id}")
     ResponseEntity<String> exclude(@PathVariable long id) {
         String delete = studentsMetCrud.delete(id);
         return ResponseEntity.ok().body(delete);
     }
+
     @Operation(summary = "НАЙТИ СТУДЕНТА ПО ЕГО УЧЕТНОМУ НОМЕРУ")
     @GetMapping("find/{id}")
     public ResponseEntity<Students> search(@PathVariable int id) {
@@ -41,21 +49,22 @@ public class StudentController {
         if (students == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(students);
     }
+
     @Operation(summary = "ПОКАЗАТЬ ВЕСЬ СПИСОК СТУДЕНТОВ")
     @GetMapping("allStudents")
-    public ResponseEntity<StringBuilder> all() {
-        StringBuilder allStudents = studentsMetCrud.getAll();
-        if (allStudents.isEmpty())
-            return ResponseEntity.status(404).body(allStudents.append("Список пуст, добавьте учеников."));
-        return ResponseEntity.ok(allStudents);
+    public ResponseEntity<?> all() {
+        List<Students> all = studentsMetCrud.getAll();
+        if (all.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(all);
     }
+
     @Operation(summary = "НАЙТИ СТУДЕНТОВ ПО ВОЗРАСТУ")
     @GetMapping("age/{age}")
-    public ResponseEntity<StringBuilder> getAgeStudents(@PathVariable int age) {
-        StringBuilder allStudents = new StudentService().getAgeStudents(age);
-        if (allStudents.isEmpty())
-            return ResponseEntity.status(404).body(allStudents.append("Учеников с таким возрастом в школе нет."));
-        return ResponseEntity.ok(allStudents);
+    public ResponseEntity<List<Students>> getAgeStudents(@PathVariable int age) {
+        List<Students> ageStudents = studentService.getAgeStudents(age);
+        if (ageStudents.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ageStudents);
     }
+
 
 }
