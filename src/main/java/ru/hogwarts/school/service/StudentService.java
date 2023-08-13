@@ -7,11 +7,12 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Students;
 import ru.hogwarts.school.repositories.StudentRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
 public class StudentService implements MetCrud<Students> {
-    Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
     @Resource
     private StudentRepository studentRepository;
 
@@ -79,5 +80,14 @@ public class StudentService implements MetCrud<Students> {
         }
         logger.debug("Для поиска выбран возраст {} лет", age);
         return studentRepository.findByAge(age);
+    }
+
+    public List<Students> findByAgeBetween(int begin, int end) {
+        List<Students> byAgeBetween = studentRepository.findByAgeBetween(begin, end);
+        if (byAgeBetween.isEmpty()) return null;
+        return byAgeBetween;
+    }
+    public Collection<Students> findStudentsByFacultyId(int facultyId){
+        return studentRepository.findStudentsByFacultyId(facultyId);
     }
 }

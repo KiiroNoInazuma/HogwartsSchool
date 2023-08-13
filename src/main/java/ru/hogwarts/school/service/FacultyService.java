@@ -79,7 +79,7 @@ public class FacultyService implements MetCrud<Faculties> {
         if (faculties != null) {
             facultiesRepository.deleteById(id);
             return faculties + " упразднен.";
-        }else {
+        } else {
             return null;
         }
     }
@@ -112,5 +112,13 @@ public class FacultyService implements MetCrud<Faculties> {
         List<Faculties> list = facultiesRepository.getFacultiesByColor(color);
         if (list.isEmpty()) return null;
         return list;
+    }
+
+    public Faculties findByName(String name) {
+        if (name.isBlank()) return null;
+        return facultiesRepository.findByNameIgnoreCase(name);
+    }
+    public Faculties facultyByStudentId(long id){
+        return facultiesRepository.findFacultiesByStudentsId(id);
     }
 }

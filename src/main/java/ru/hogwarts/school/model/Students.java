@@ -1,8 +1,9 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Generated;
+
 
 @Data
 @Entity
@@ -15,4 +16,9 @@ public class Students {
     private int age;
     @Column(name = "faculty_id")
     private int facultyId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_id", insertable = false, updatable = false, nullable = false)
+    @JsonIgnore
+    private Faculties faculty;
+
 }

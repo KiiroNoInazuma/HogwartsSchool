@@ -9,6 +9,7 @@ import ru.hogwarts.school.model.Students;
 import ru.hogwarts.school.service.MetCrud;
 import ru.hogwarts.school.service.StudentService;
 
+import java.util.Collection;
 import java.util.List;
 
 @Tag(name = "Добавить учеников в список школы")
@@ -36,8 +37,8 @@ public class StudentController {
     }
 
     @Operation(summary = "ИСКЛЮЧИТЬ СТУДЕНТА ИЗ СПИСКА")
-    @DeleteMapping("exclude/{id}")
-    ResponseEntity<String> exclude(@PathVariable long id) {
+    @DeleteMapping("exclude")
+    ResponseEntity<String> exclude(@RequestParam long id) {
         String delete = studentsMetCrud.delete(id);
         return ResponseEntity.ok().body(delete);
     }
@@ -66,5 +67,21 @@ public class StudentController {
         return ResponseEntity.ok(ageStudents);
     }
 
+    @Operation(summary = "НАЙТИ ВСЕХ СТУДЕНТОВ, ВОЗРАСТ КОТОРЫХ НАХОДИТСЯ" +
+            " В ПРОМЕЖУТКЕ, ПРИШЕДШИМ В ЗАПРОСЕ")
+    @GetMapping("age/between")
+    public ResponseEntity<List<Students>> findByAgeBetween(@RequestParam int begin,
+                                                           @RequestParam int end) {
+        List<Students> byAgeBetween = studentService.findByAgeBetween(begin, end);
+        if (byAgeBetween == null) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(byAgeBetween);
+    }
+    @Operation(summary = "НАЙТИ СТУДЕНТОВ ФАКУЛЬТЕТА ПО ID ФАКУЛЬТЕТА")
+    @GetMapping("findStudentsByFacultyId")
+    public ResponseEntity<Collection<Students>> findStudentsByFacultyId(@RequestParam int id){
+        Collection<Students> studentsByFacultyId = studentService.findStudentsByFacultyId(id);
+        if (studentsByFacultyId == null) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(studentsByFacultyId);
+    }
 
 }

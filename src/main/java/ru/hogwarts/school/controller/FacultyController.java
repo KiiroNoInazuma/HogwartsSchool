@@ -72,4 +72,18 @@ public class FacultyController {
         return ResponseEntity.ok(colorFaculty);
     }
 
+    @Operation(summary = "НАЙТИ ФАКУЛЬТЕТ ПО ИМЕНИ")
+    @GetMapping("name")
+    public ResponseEntity<Faculties> findByName(@RequestParam String name) {
+        Faculties byName = facultyService.findByName(name);
+        return ResponseEntity.ok(byName);
+    }
+
+    @Operation(summary = "НАЙТИ ФАКУЛЬТЕТ СТУДЕНТА ПО ID СТУДЕНТА")
+    @GetMapping("facultyByStudent")
+    public ResponseEntity<Faculties> facultyByStudentId(@RequestParam long id) {
+        Faculties faculties = facultyService.facultyByStudentId(id);
+        return ResponseEntity.ok(faculties);
+    }
+
 }
