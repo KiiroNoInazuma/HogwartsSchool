@@ -16,8 +16,8 @@ public class Faculties {
     private long id;
     private String name;
     private String color;
-    @OneToMany(mappedBy = "faculty",  cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @Schema(hidden = true)
     private Collection<Students> students;
-
 }
+

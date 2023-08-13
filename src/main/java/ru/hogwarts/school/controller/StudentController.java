@@ -76,12 +76,29 @@ public class StudentController {
         if (byAgeBetween == null) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(byAgeBetween);
     }
+
     @Operation(summary = "НАЙТИ СТУДЕНТОВ ФАКУЛЬТЕТА ПО ID ФАКУЛЬТЕТА")
     @GetMapping("findStudentsByFacultyId")
-    public ResponseEntity<Collection<Students>> findStudentsByFacultyId(@RequestParam int id){
+    public ResponseEntity<Collection<Students>> findStudentsByFacultyId(@RequestParam int id) {
         Collection<Students> studentsByFacultyId = studentService.findStudentsByFacultyId(id);
         if (studentsByFacultyId == null) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(studentsByFacultyId);
     }
 
+    @Operation(summary = "КОЛИЧЕСТВО ВСЕХ СТУДЕНТОВ В ШКОЛЕ")
+    @GetMapping("count")
+    public ResponseEntity<Integer> count() {
+        return ResponseEntity.ok(studentService.countStudents());
+    }
+
+    @Operation(summary = "СРЕДНИЙ ВОЗРАСТ СТУДЕНТОВ")
+    @GetMapping("average")
+    public ResponseEntity<Float> averageAge() {
+        return ResponseEntity.ok(studentService.averageAge());
+    }
+    @Operation(summary = "ПЯТЬ САМЫХ МОЛОДЫХ СТУДЕНТОВ")
+    @GetMapping("youngest")
+    public ResponseEntity<Collection<Students>> getFiveYoungestStudents() {
+        return ResponseEntity.ok(studentService.youngestStudents());
+    }
 }

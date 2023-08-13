@@ -90,4 +90,13 @@ public class StudentService implements MetCrud<Students> {
     public Collection<Students> findStudentsByFacultyId(int facultyId){
         return studentRepository.findStudentsByFacultyId(facultyId);
     }
+    public int countStudents(){
+        return studentRepository.countStudent();
+    }
+    public float averageAge(){
+        return studentRepository.averageAge();
+    }
+    public Collection<Students> youngestStudents(){
+        return studentRepository.findAllStudents();
+    }
 }

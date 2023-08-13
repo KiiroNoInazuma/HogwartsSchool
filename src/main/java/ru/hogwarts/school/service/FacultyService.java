@@ -121,4 +121,5 @@ public class FacultyService implements MetCrud<Faculties> {
     public Faculties facultyByStudentId(long id){
         return facultiesRepository.findFacultiesByStudentsId(id);
     }
+
 }

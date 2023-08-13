@@ -15,10 +15,11 @@ public class Students {
     private String name;
     private int age;
     @Column(name = "faculty_id")
-    private int facultyId;
+    private long facultyId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id", insertable = false, updatable = false, nullable = false)
     @JsonIgnore
     private Faculties faculty;
+
 
 }
