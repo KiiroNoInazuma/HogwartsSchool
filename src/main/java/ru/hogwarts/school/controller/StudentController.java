@@ -96,9 +96,15 @@ public class StudentController {
     public ResponseEntity<Float> averageAge() {
         return ResponseEntity.ok(studentService.averageAge());
     }
+
     @Operation(summary = "ПЯТЬ САМЫХ МОЛОДЫХ СТУДЕНТОВ")
     @GetMapping("youngest")
     public ResponseEntity<Collection<Students>> getFiveYoungestStudents() {
         return ResponseEntity.ok(studentService.youngestStudents());
+    }
+    @Operation(summary = "ПАГИНАЦИЯ")
+    @GetMapping("pagination")
+    public ResponseEntity<List<Students>> getAllPagination(int a, int b) {
+        return ResponseEntity.ok(studentService.getAll(a, b));
     }
 }

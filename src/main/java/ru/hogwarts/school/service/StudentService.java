@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Students;
 import ru.hogwarts.school.repositories.StudentRepository;
@@ -69,6 +70,11 @@ public class StudentService implements MetCrud<Students> {
         return studentRepository.findAll();
     }
 
+    public List<Students> getAll(int a, int b) {
+        PageRequest pageRequest = PageRequest.of(a - 1, b);
+        return studentRepository.findAll(pageRequest).getContent();
+    }
+
 
     public List<Students> getAgeStudents(int age) {
         try {
@@ -87,16 +93,22 @@ public class StudentService implements MetCrud<Students> {
         if (byAgeBetween.isEmpty()) return null;
         return byAgeBetween;
     }
-    public Collection<Students> findStudentsByFacultyId(int facultyId){
+
+    public Collection<Students> findStudentsByFacultyId(int facultyId) {
         return studentRepository.findStudentsByFacultyId(facultyId);
     }
-    public int countStudents(){
+
+    public int countStudents() {
         return studentRepository.countStudent();
     }
-    public float averageAge(){
+
+    public float averageAge() {
         return studentRepository.averageAge();
     }
-    public Collection<Students> youngestStudents(){
+
+    public Collection<Students> youngestStudents() {
         return studentRepository.findAllStudents();
     }
+
+
 }
