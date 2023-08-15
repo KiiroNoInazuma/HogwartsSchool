@@ -38,11 +38,8 @@ public class AvatarService {
         avatar.setFileSize(multipartFile.getSize());
         avatar.setMediaType(multipartFile.getContentType());
         avatar.setData(inputStream.readAllBytes());
-        if (students != null) {
-            avatarRepository.save(avatar);
-        } else {
-            throw new NullPointerException();
-        }
+        avatarRepository.save(avatar);
+
     }
 
 
