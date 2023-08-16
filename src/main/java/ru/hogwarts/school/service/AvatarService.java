@@ -33,15 +33,21 @@ public class AvatarService {
     private static String point(String txt) {
         return txt.substring(txt.indexOf('.'));
     }
-    private static byte[] microPic(String file) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BufferedImage originalImage = ImageIO.read(new File(file));
-        originalImage.setRGB(128, 128, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics2D = originalImage.createGraphics();
-        graphics2D.drawImage(originalImage, 0, 0, 128, 128, null);
-        graphics2D.dispose();
-        ImageIO.write(originalImage, "jpg", baos);
-        return baos.toByteArray();
+
+    private byte[] microPic(String file) throws IOException {
+
+        try (InputStream inputStream = new FileInputStream(file);
+             BufferedInputStream is = new BufferedInputStream(inputStream, 1024);
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            BufferedImage originalImage = ImageIO.read(is);
+            int height = originalImage.getHeight()/(originalImage.getWidth()/55);
+            BufferedImage microImage = new BufferedImage(100, height, originalImage.getType());
+            Graphics2D graphics2D = microImage.createGraphics();
+            graphics2D.drawImage(originalImage, 0, 0, 100, 100, null);
+            graphics2D.dispose();
+            ImageIO.write(microImage, "jpg", baos);
+            return baos.toByteArray();
+        }
     }
 
     public void upload(Long id, MultipartFile multipartFile) throws IOException {
@@ -53,7 +59,7 @@ public class AvatarService {
         avatar.setFilePath(pathFile);
         avatar.setFileSize(multipartFile.getSize());
         avatar.setMediaType(multipartFile.getContentType());
-        avatar.setData(multipartFile.getBytes());
+        avatar.setData(microPic(pathFile));
         if (students != null) {
             avatarRepository.save(avatar);
         } else {
