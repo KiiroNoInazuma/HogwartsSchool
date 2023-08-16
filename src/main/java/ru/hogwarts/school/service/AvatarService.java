@@ -9,7 +9,10 @@ import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Students;
 import ru.hogwarts.school.repositories.AvatarRepository;
 
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Objects;
 
 @Service
@@ -30,10 +33,21 @@ public class AvatarService {
     private static String point(String txt) {
         return txt.substring(txt.indexOf('.'));
     }
+    private static byte[] microPic(String file) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BufferedImage originalImage = ImageIO.read(new File(file));
+        originalImage.setRGB(128, 128, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics2D = originalImage.createGraphics();
+        graphics2D.drawImage(originalImage, 0, 0, 128, 128, null);
+        graphics2D.dispose();
+        ImageIO.write(originalImage, "jpg", baos);
+        return baos.toByteArray();
+    }
 
     public void upload(Long id, MultipartFile multipartFile) throws IOException {
         Students students = metCrud.find(id);
         String pathFile = path + point(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        multipartFile.getInputStream().transferTo(new FileOutputStream(pathFile));
         Avatar avatar = avatarRepository.findByStudentsId(id).orElse(new Avatar());
         avatar.setStudents(students);
         avatar.setFilePath(pathFile);
