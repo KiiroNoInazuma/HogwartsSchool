@@ -40,12 +40,12 @@ public class AvatarService {
              BufferedInputStream is = new BufferedInputStream(inputStream, 1024);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             BufferedImage originalImage = ImageIO.read(is);
-            int height = originalImage.getHeight()/(originalImage.getWidth()/55);
+            int height = originalImage.getHeight()/(originalImage.getWidth()/100);
             BufferedImage microImage = new BufferedImage(100, height, originalImage.getType());
             Graphics2D graphics2D = microImage.createGraphics();
             graphics2D.drawImage(originalImage, 0, 0, 100, 100, null);
             graphics2D.dispose();
-            ImageIO.write(microImage, "jpg", baos);
+            ImageIO.write(microImage, "png", baos);
             return baos.toByteArray();
         }
     }
