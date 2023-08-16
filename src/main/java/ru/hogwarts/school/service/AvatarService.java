@@ -19,11 +19,11 @@ import java.util.Objects;
 @Transactional
 public class AvatarService {
     @Value("${path.my.photo}")
-    String path;
-    @Autowired
-    private AvatarRepository avatarRepository;
-    @Autowired
-    private MetCrud<Students> metCrud;
+    private String path;
+
+    private final AvatarRepository avatarRepository;
+
+    private final MetCrud<Students> metCrud;
 
 
     public Avatar avatar(long id) {
@@ -32,6 +32,11 @@ public class AvatarService {
 
     private static String point(String txt) {
         return txt.substring(txt.indexOf('.'));
+    }
+    @Autowired
+    public AvatarService(AvatarRepository avatarRepository, MetCrud<Students> metCrud) {
+        this.avatarRepository = avatarRepository;
+        this.metCrud = metCrud;
     }
 
     private byte[] microPic(String file) throws IOException {

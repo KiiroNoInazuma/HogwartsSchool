@@ -17,8 +17,12 @@ import java.io.OutputStream;
 
 @RestController
 public class AvatarController {
+
+    private final AvatarService avatarService;
     @Autowired
-    private AvatarService avatarService;
+    public AvatarController(AvatarService avatarService) {
+        this.avatarService = avatarService;
+    }
 
     @PostMapping(value = "cover", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> upload(@RequestParam Long id, @RequestParam MultipartFile cover) throws IOException {
