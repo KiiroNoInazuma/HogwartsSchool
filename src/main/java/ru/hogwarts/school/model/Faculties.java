@@ -1,33 +1,23 @@
 package ru.hogwarts.school.model;
 
 
-import lombok.Getter;
-import ru.hogwarts.school.service.StudentService;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import lombok.Data;
 
-import java.util.Map;
+import java.util.Collection;
 
-@Getter
+@Data
+@Entity
+@Table(name = "faculties")
 public class Faculties {
-    private String name, color;
-    private Map<Long, Students> studentsMap;
-
-    public void setFacultyParam(String name, String color) {
-        this.name = name;
-        this.color = color;
-        studentsMap = StudentService.getStudentsMap();
-    }
-
-    private StringBuilder convert() {
-        StringBuilder result = new StringBuilder();
-        for (Map.Entry<Long, Students> map : studentsMap.entrySet()) {
-            result.append(map.getKey()).append(": ").append(map.getValue()).append("\n");
-        }
-        return result;
-    }
-    @Override
-    public String toString() {
-        return "Факультет: " + name + "; Цвет: " + color + "\nУченики:\n" + convert();
-    }
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String name;
+    private String color;
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @Schema(hidden = true)
+    private Collection<Students> students;
 }
+
